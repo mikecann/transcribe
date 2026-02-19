@@ -35,16 +35,16 @@ echo Transcribing audio (device: !DEVICE!)...
 set "TEMP_OUTPUT_DIR=%TEMP%\transcribe_output_%RANDOM%"
 mkdir "!TEMP_OUTPUT_DIR!" 2>nul
 if /i "!DEVICE!"=="cuda" (
-    "%EXEDIR%faster-whisper-xxl.exe" --model_dir "%EXEDIR%_models" --device !DEVICE! --compute_type float16 --output_dir "!TEMP_OUTPUT_DIR!" --output_format txt "!TEMP_AUDIO!"
+    "%EXEDIR%faster-whisper-xxl.exe" --model_dir "%EXEDIR%_models" --device !DEVICE! --compute_type float16 --output_dir "!TEMP_OUTPUT_DIR!" --output_format srt "!TEMP_AUDIO!"
 ) else (
-    "%EXEDIR%faster-whisper-xxl.exe" --model_dir "%EXEDIR%_models" --device !DEVICE! --output_dir "!TEMP_OUTPUT_DIR!" --output_format txt "!TEMP_AUDIO!"
+    "%EXEDIR%faster-whisper-xxl.exe" --model_dir "%EXEDIR%_models" --device !DEVICE! --output_dir "!TEMP_OUTPUT_DIR!" --output_format srt "!TEMP_AUDIO!"
 )
 
 if errorlevel 1 (
     if /i "!DEVICE!"=="cuda" (
         echo.
         echo CUDA failed, retrying with CPU...
-        "%EXEDIR%faster-whisper-xxl.exe" --model_dir "%EXEDIR%_models" --device cpu --output_dir "!TEMP_OUTPUT_DIR!" --output_format txt "!TEMP_AUDIO!"
+        "%EXEDIR%faster-whisper-xxl.exe" --model_dir "%EXEDIR%_models" --device cpu --output_dir "!TEMP_OUTPUT_DIR!" --output_format srt "!TEMP_AUDIO!"
         if errorlevel 1 (
             echo Error: Transcription failed on both CUDA and CPU
             del "!TEMP_AUDIO!" 2>nul
@@ -61,8 +61,8 @@ if errorlevel 1 (
 
 del "!TEMP_AUDIO!" 2>nul
 
-set "FINAL_OUTPUT=%~dpn1.txt"
-for %%f in ("!TEMP_OUTPUT_DIR!\*.txt") do (
+set "FINAL_OUTPUT=%~dpn1.srt"
+for %%f in ("!TEMP_OUTPUT_DIR!\*.srt") do (
     move /y "%%f" "!FINAL_OUTPUT!" >nul 2>&1
     set "OUTPUT_FILE=!FINAL_OUTPUT!"
 )
