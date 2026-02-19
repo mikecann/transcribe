@@ -4,9 +4,15 @@ Transcribes a video file to text using [faster-whisper-xxl](https://github.com/P
 
 ## Usage
 
+**From the terminal:**
 ```
 transcribe <video_file> [--cpu]
 ```
+
+**From File Explorer:**
+Right-click any video file, then choose **Mike's Tools > Transcribe Video**.
+(On Windows 11, click "Show more options" first to get the classic menu.)
+`install.ps1` registers this for `.mp4`, `.mkv`, `.avi`, `.mov`, `.wmv`, `.webm`, and other common video formats.
 
 | Argument | Description |
 |---|---|
