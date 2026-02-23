@@ -1,3 +1,5 @@
+![alt text](docs/ss1.png)
+
 # ![](icons/film.png) transcribe
 
 Transcribes a video file to text using [faster-whisper-xxl](https://github.com/Purfview/whisper-standalone-win). Extracts audio with ffmpeg, runs Whisper, and saves the transcript as an `.srt` file next to the input.
