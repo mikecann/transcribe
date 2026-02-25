@@ -1,4 +1,4 @@
-![alt text](docs/ss1.png)
+![header](docs/header.png)
 
 # ![](icons/film.png) transcribe
 
@@ -22,6 +22,10 @@ Right-click any video file, then choose **Mike's Tools > Transcribe Video**.
 | `--cpu` | Force CPU inference (default is CUDA; falls back to CPU automatically if CUDA fails) |
 
 The transcript is saved as `<input_basename>.srt` in the same folder as the input file.
+
+## Screenshots
+
+![screenshot](docs/ss1.png)
 
 ## Dependencies
 
