@@ -48,17 +48,21 @@ if errorlevel 1 (
 echo Transcribing audio (device: !DEVICE!)...
 set "TEMP_OUTPUT_DIR=%TEMP%\transcribe_output_%RANDOM%"
 mkdir "!TEMP_OUTPUT_DIR!" 2>nul
+rem The audio file must come before --output_format: that flag takes one or
+rem more values (nargs='+') and greedily swallows whatever follows it,
+rem including a trailing positional path, which faster-whisper-xxl's own
+rem --help warns about ("dont add audio after this").
 if /i "!DEVICE!"=="cuda" (
-    "%EXEDIR%faster-whisper-xxl.exe" --model_dir "%EXEDIR%_models" --device !DEVICE! --compute_type float16 --output_dir "!TEMP_OUTPUT_DIR!" --output_format srt "!TEMP_AUDIO!"
+    "%EXEDIR%faster-whisper-xxl.exe" "!TEMP_AUDIO!" --model_dir "%EXEDIR%_models" --device !DEVICE! --compute_type float16 --output_dir "!TEMP_OUTPUT_DIR!" --output_format srt
 ) else (
-    "%EXEDIR%faster-whisper-xxl.exe" --model_dir "%EXEDIR%_models" --device !DEVICE! --output_dir "!TEMP_OUTPUT_DIR!" --output_format srt "!TEMP_AUDIO!"
+    "%EXEDIR%faster-whisper-xxl.exe" "!TEMP_AUDIO!" --model_dir "%EXEDIR%_models" --device !DEVICE! --output_dir "!TEMP_OUTPUT_DIR!" --output_format srt
 )
 
 if errorlevel 1 (
     if /i "!DEVICE!"=="cuda" (
         echo.
         echo CUDA failed, retrying with CPU...
-        "%EXEDIR%faster-whisper-xxl.exe" --model_dir "%EXEDIR%_models" --device cpu --output_dir "!TEMP_OUTPUT_DIR!" --output_format srt "!TEMP_AUDIO!"
+        "%EXEDIR%faster-whisper-xxl.exe" "!TEMP_AUDIO!" --model_dir "%EXEDIR%_models" --device cpu --output_dir "!TEMP_OUTPUT_DIR!" --output_format srt
         if errorlevel 1 (
             echo Error: Transcription failed on both CUDA and CPU
             del "!TEMP_AUDIO!" 2>nul
