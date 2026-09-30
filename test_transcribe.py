@@ -5,6 +5,7 @@ import unittest
 import wave
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import patch
 
 
 SCRIPT = Path(__file__).with_name("transcribe.py")
@@ -16,6 +17,18 @@ SPEC.loader.exec_module(transcribe_tool)
 
 
 class TranscribeSpeakerTests(unittest.TestCase):
+    def test_repo_dotenv_is_loaded_next_to_script_regardless_of_cwd(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            repo = root / "clone"
+            repo.mkdir()
+            (root / ".env").write_text("HF_TOKEN=outside-repo\n", encoding="utf-8")
+            (repo / ".env").write_text("HF_TOKEN=repo-token\n", encoding="utf-8")
+            with patch.object(transcribe_tool, "__file__", str(repo / "transcribe.py")):
+                with patch.dict(transcribe_tool.os.environ, {}, clear=True):
+                    transcribe_tool.load_repo_dotenv()
+                    self.assertEqual(transcribe_tool.resolve_huggingface_token(None), "repo-token")
+
     def test_reads_pyannote_community_output_shape(self):
         output = SimpleNamespace(
             speaker_diarization=[

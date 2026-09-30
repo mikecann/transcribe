@@ -1,4 +1,4 @@
-# transcribe/deps.ps1
+# deps.ps1
 # Checks that the large binaries required by transcribe are present in C:\dev\tools.
 # These cannot be auto-downloaded; this script just tells you what is missing.
 

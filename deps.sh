@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# macOS / Linux: ffmpeg + faster-whisper for tools/transcribe/transcribe
+# macOS / Linux: ffmpeg + faster-whisper for the transcribe launcher.
 set -euo pipefail
 
 WITH_DIARIZE=0
@@ -43,7 +43,7 @@ if [[ "$WITH_DIARIZE" == "1" ]]; then
     exit 1
   fi
 else
-  echo "  SKIP optional diarization deps. Run: bash tools/transcribe/deps.sh --with-diarize"
+  echo "  SKIP optional diarization deps. Run: bash deps.sh --with-diarize"
 fi
 
 echo ""

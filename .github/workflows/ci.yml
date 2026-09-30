@@ -1,0 +1,48 @@
+name: CI
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test dependencies (CPU only, no models)
+        run: |
+          python -m pip install numpy
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - run: python -m unittest discover -v
+      - run: python -m compileall -q transcribe.py test_transcribe.py test_install.py
+      - name: Check shell scripts and launcher
+        run: |
+          bash -n install.sh deps.sh transcribe
+          ./transcribe --help
+
+  powershell:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse every PowerShell script
+        shell: pwsh
+        run: |
+          $failed = $false
+          Get-ChildItem -Recurse -Filter *.ps1 | ForEach-Object {
+            $tokens = $null
+            $parseErrors = $null
+            [void][System.Management.Automation.Language.Parser]::ParseFile($_.FullName, [ref]$tokens, [ref]$parseErrors)
+            if ($parseErrors.Count -gt 0) {
+              $parseErrors | ForEach-Object { Write-Host $_ }
+              $failed = $true
+            }
+          }
+          if ($failed) { exit 1 }
+      - name: Check installer helpers
+        shell: pwsh
+        run: ./test-install.ps1

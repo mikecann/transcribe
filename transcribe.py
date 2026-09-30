@@ -62,7 +62,7 @@ def load_dotenv_file(path: Path) -> None:
 
 
 def load_repo_dotenv() -> None:
-    load_dotenv_file(Path(__file__).resolve().parents[2] / ".env")
+    load_dotenv_file(Path(__file__).resolve().parent / ".env")
 
 
 def seconds_to_srt_ts(sec: float) -> str:
@@ -391,7 +391,7 @@ def main() -> None:
         die(
             "faster-whisper is not installed.\n"
             "  python3 -m pip install faster-whisper\n"
-            "Or run: bash tools/transcribe/deps.sh\n",
+            "Or run: bash deps.sh\n",
         )
 
     ffmpeg = require_ffmpeg()
