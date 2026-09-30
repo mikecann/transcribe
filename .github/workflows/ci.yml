@@ -46,3 +46,6 @@ jobs:
       - name: Check installer helpers
         shell: pwsh
         run: ./test-install.ps1
+      - name: Check dependency probe behaviour
+        shell: pwsh
+        run: ./test-deps.ps1

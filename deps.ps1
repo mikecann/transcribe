@@ -2,6 +2,14 @@
 # Checks that the large binaries required by transcribe are present in C:\dev\tools.
 # These cannot be auto-downloaded; this script just tells you what is missing.
 
+# install.ps1 runs with $ErrorActionPreference = 'Stop'. On Windows PowerShell,
+# assigning a native command's output to a variable under that preference turns
+# an expected nonzero exit (the --diarize package probes below, which are
+# expected to fail on a fresh machine) into a terminating error, even with
+# stderr redirected to $null. That aborted the whole install before it could
+# report the ffmpeg/faster-whisper-xxl status or finish writing stubs.
+$ErrorActionPreference = 'Continue'
+
 $ToolsDir = "C:\dev\tools"
 $ok = $true
 
