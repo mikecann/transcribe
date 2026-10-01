@@ -5,8 +5,10 @@ Right-click a video and get an .srt transcript saved right next to it
 Windows · macOS · Linux
 
 <!-- media: hero -->
-<!-- ![transcribe](docs/hero.png) -->
-<!-- media: hero -->
+![transcribe turning a short video into subtitles in a terminal](docs/terminal.png)
+
+[Watch it run (11 seconds)](docs/demo.mp4)
+<!-- /media: hero -->
 
 ## What it is
 
